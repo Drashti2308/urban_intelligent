@@ -1,0 +1,127 @@
+import streamlit as st
+
+from src.ui.service_factory import (
+    get_gui_adapter,
+    verify_artifacts
+)
+
+
+st.set_page_config(
+    page_title="Urban Infrastructure Pulse Intelligence",
+    page_icon="🏙️",
+    layout="wide"
+)
+
+st.title("Urban Infrastructure Pulse Intelligence")
+
+st.caption(
+    "NYC 311 Infrastructure Reporting Intelligence "
+    "| Historical period: 2023–2025"
+)
+
+st.markdown("---")
+
+
+@st.cache_resource(show_spinner=False)
+def load_backend():
+    return get_gui_adapter()
+
+
+try:
+    with st.spinner("Loading historical infrastructure models..."):
+        verify_artifacts()
+        adapter = load_backend()
+
+except Exception as exc:
+    st.error("Application backend could not be loaded.")
+    st.exception(exc)
+    st.stop()
+
+
+st.success("Historical intelligence backend connected successfully.")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        "Historical Complaints",
+        "685,284"
+    )
+
+with col2:
+    st.metric(
+        "DBSCAN Hotspots",
+        "2,846"
+    )
+
+with col3:
+    st.metric(
+        "K-Means Areas",
+        "238"
+    )
+
+
+st.subheader("Application Modules")
+
+st.markdown(
+    """
+    **Complaint Intelligence**
+
+    Associate complaint coordinates with established
+    historical DBSCAN reporting hotspots.
+
+    **Investigation Recommendations**
+
+    Explore evidence-based infrastructure
+    investigation suggestions.
+
+    **Area Reporting Patterns**
+
+    Review historical borough-ZIP K-Means
+    reporting profiles with ZCTA consistency checks.
+
+    **Geographic Intelligence**
+
+    Explore historical hotspot distributions
+    and reporting patterns.
+    """
+)
+
+st.info(
+    "Application structure initialized. "
+    "Interactive complaint lookup and mapping "
+    "will be added in the next development steps."
+)
+
+with st.expander("Models and interpretation safeguards"):
+    st.write(
+        "DBSCAN: historical spatial reporting clusters."
+    )
+    st.write(
+        "K-Means: aggregated borough-ZIP "
+        "historical reporting patterns."
+    )
+    st.write(
+        "Recommendations: suggested investigations, "
+        "not confirmed infrastructure defects."
+    )
+    st.write(
+        "ZCTA matching does not establish "
+        "USPS postal-address verification."
+    )
+    st.write(
+        "Closed complaint status does not "
+        "prove physical infrastructure repair."
+    )
+    st.write(
+        "This application does not predict "
+        "infrastructure damage or physical risk."
+    )
+
+
+st.sidebar.header("System Information")
+st.sidebar.write("Historical period: 2023–2025")
+st.sidebar.write("Spatial model: DBSCAN F")
+st.sidebar.write("Area model: PCA90 K-Means K=3")
+st.sidebar.write("Geographic reference: NYC ZCTA")
+st.sidebar.caption("Historical analysis, not live monitoring.")

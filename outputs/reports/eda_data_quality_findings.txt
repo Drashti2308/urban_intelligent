@@ -1,0 +1,14 @@
+EDA — DATA QUALITY FINDINGS
+==================================================
+
+1. The cleaned dataset contains 685,284 complaint records and 53 columns.
+2. There are 15 complaint categories.
+3. Duplicate complaint IDs: 0.
+4. Missing complaint IDs: 0.
+5. Missing creation dates: 0.
+6. Missing coordinate pairs: 74,000 (10.80%).
+7. Unavailable resolution durations: 23,166 (3.38%).
+8. Backward closing timestamps flagged: 5,623.
+9. Missing or invalid coordinates must be excluded from spatial plots/DBSCAN.
+10. Complaint closure duration is not necessarily physical repair duration.
+11. Missing due dates: 685,284 (100.00%).
