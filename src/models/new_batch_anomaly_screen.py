@@ -343,6 +343,40 @@ def screen_daily_anomalies(
                 "insufficient_historical_support"
             )
 
+        # PHASE 23.3 — STRONG HISTORICAL EXCEEDANCE
+        #
+        # Require at least 3 extra reports AND
+        # at least 50% above each historical maximum.
+        #
+        # A historical maximum of zero does not
+        # require a percentage calculation.
+        # Existing history-support checks still apply.
+
+        elif (
+            count >= min_incoming_reports
+            and broad_ev["supported"]
+            and seasonal_above_max
+            and broad_above_max
+            and (count - seasonal_ev["maximum"]) >= 3
+            and (
+                seasonal_ev["maximum"] == 0
+                or count >= 1.5 * seasonal_ev["maximum"]
+            )
+            and (count - broad_ev["maximum"]) >= 3
+            and (
+                broad_ev["maximum"] == 0
+                or count >= 1.5 * broad_ev["maximum"]
+            )
+        ):
+
+            review_status = (
+                "cross_window_consistent_candidate"
+            )
+
+        # A count may exceed historical maxima
+        # without meeting the stronger threshold.
+        # Do not classify it as an anomaly candidate.
+
         elif (
             count >= min_incoming_reports
             and broad_ev["supported"]
@@ -351,7 +385,7 @@ def screen_daily_anomalies(
         ):
 
             review_status = (
-                "cross_window_consistent_candidate"
+                "historical_max_exceeded_below_strength_threshold"
             )
 
         elif (
